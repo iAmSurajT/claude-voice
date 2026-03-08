@@ -6,7 +6,7 @@ Records audio directly in the terminal, transcribes via Google Speech API, and f
 
 ## Demo
 
-https://github.com/iAmSurajT/claude-voice/raw/main/demo/final-recording-voice-demo-1.mov
+https://github.com/user-attachments/assets/a7b31f99-3352-4cf1-b4b0-23b8eb9251b7
 
 > Record your voice, get a transcript, and Claude Code responds as if you typed it.
 
