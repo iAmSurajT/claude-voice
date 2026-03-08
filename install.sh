@@ -119,6 +119,8 @@ echo -e "  Script:  ${GREEN}$VOICE_SCRIPT${RESET}"
 
 COMMAND_BODY="Use Bash to run the voice input script and capture the output. It records audio inline in the terminal.
 
+IMPORTANT: This command MUST be pasted into the terminal (not run in background). Set the Bash tool's \`run_in_background\` parameter to \`false\` and use a long timeout (120000ms) since the user needs time to speak. Do NOT background this command - it requires real-time terminal interaction for recording audio.
+
 Run this exact command:
 \`\`\`
 $PY $VOICE_SCRIPT
