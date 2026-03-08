@@ -262,7 +262,9 @@ def main():
         sys.exit(1)
 
     eprint()
-    print(text)
+    eprint(f"  {BOLD}Transcript:{RESET} {GREEN}{text}{RESET}")
+    eprint()
+    print(f"{GREEN}{text}{RESET}")
 
 
 if __name__ == "__main__":
