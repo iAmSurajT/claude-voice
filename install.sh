@@ -40,9 +40,14 @@ if [[ -z "$PY" ]]; then
     if command -v brew &>/dev/null; then
         echo -e "  ${DIM}No suitable Python found. Installing python@3.13 via brew...${RESET}"
         brew install python@3.13 >/dev/null 2>&1
-        PY=$(find_python)
+        PY=$(find_python) || true
+        if [[ -z "$PY" ]]; then
+            echo -e "  ${RED}Error: Python installation failed. Install Python 3.8+ manually.${RESET}"
+            exit 1
+        fi
     else
-        echo -e "  ${RED}Error: Python 3.8+ not found. Install Python first.${RESET}"
+        echo -e "  ${RED}Error: Python 3.8+ not found and Homebrew not available.${RESET}"
+        echo -e "  ${RED}Install Homebrew first: https://brew.sh${RESET}"
         exit 1
     fi
 fi
@@ -88,9 +93,14 @@ done
 
 if $NEEDS_INSTALL; then
     echo -e "  ${DIM}Installing Python packages...${RESET}"
-    $PY -m pip install --quiet --break-system-packages sounddevice scipy SpeechRecognition 2>/dev/null || \
-    $PY -m pip install --quiet sounddevice scipy SpeechRecognition 2>/dev/null
-    echo -e "  Packages: ${GREEN}sounddevice, scipy, SpeechRecognition${RESET}"
+    if $PY -m pip install --quiet --break-system-packages sounddevice scipy SpeechRecognition 2>/dev/null || \
+       $PY -m pip install --quiet sounddevice scipy SpeechRecognition 2>/dev/null; then
+        echo -e "  Packages: ${GREEN}sounddevice, scipy, SpeechRecognition${RESET}"
+    else
+        echo -e "  ${RED}Error: Failed to install Python packages.${RESET}"
+        echo -e "  ${RED}Try manually: $PY -m pip install sounddevice scipy SpeechRecognition${RESET}"
+        exit 1
+    fi
 else
     echo -e "  Packages: ${DIM}already installed${RESET}"
 fi
@@ -149,8 +159,8 @@ if [[ -n "$SHELL_RC" ]]; then
         echo -e "  Alias:   ${GREEN}cv${RESET} (added to $SHELL_RC)"
     else
         # Update existing alias to point to current path
-        sed -i.bak "/alias cv=/c\\
-$ALIAS_LINE" "$SHELL_RC" && rm -f "$SHELL_RC.bak"
+        grep -v "alias cv=" "$SHELL_RC" > "$SHELL_RC.tmp" && mv "$SHELL_RC.tmp" "$SHELL_RC"
+        echo "$ALIAS_LINE" >> "$SHELL_RC"
         echo -e "  Alias:   ${GREEN}cv${RESET} (updated in $SHELL_RC)"
     fi
 fi

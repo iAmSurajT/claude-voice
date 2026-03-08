@@ -4,6 +4,17 @@ Talk to [Claude Code](https://docs.anthropic.com/en/docs/claude-code) instead of
 
 Records audio directly in the terminal, transcribes via Google Speech API, and feeds the text to Claude Code as if you typed it.
 
+## Prerequisites
+
+| Dependency | Why | Install |
+|-----------|-----|---------|
+| [Homebrew](https://brew.sh) | Package manager (macOS) | `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"` |
+| [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | CLI for Claude | `npm install -g @anthropic-ai/claude-code` |
+| Python 3.8+ | Runtime | Installed automatically by `install.sh` if missing |
+| Microphone access | Audio recording | Grant Terminal/iTerm mic permission in System Settings |
+
+On **Linux**, `apt-get` is used instead of Homebrew. Python 3 is typically pre-installed.
+
 ## Install
 
 ```bash
@@ -12,11 +23,12 @@ cd claude-voice
 ./install.sh
 ```
 
-The installer handles everything automatically:
-- Installs `portaudio` (Homebrew on macOS, apt on Linux)
+The installer handles everything else automatically:
+- Installs `portaudio` via Homebrew (or apt on Linux)
 - Installs Python packages (`sounddevice`, `scipy`, `SpeechRecognition`)
-- Creates `/user:voice` slash command for Claude Code
-- Adds `cv` shell alias
+- Creates `/user:voice` slash command for Claude Code (global)
+- Creates `/project:voice-input` slash command (project-level)
+- Adds `cv` shell alias to your `.zshrc` / `.bashrc`
 
 ## Usage
 
@@ -41,9 +53,20 @@ Interactive controls when run from a terminal:
 
 ## How it works
 
+```
+  Voice Input
+
+  * Recording (auto-stops after 5s silence)
+  * [6.2s]
+  * Recorded 8.1s
+  * create a REST API with FastAPI
+
+create a REST API with FastAPI          <-- stdout, fed to Claude
+```
+
 1. `sounddevice` records audio from your microphone
 2. Silence detection determines when you stop speaking
-3. `SpeechRecognition` sends audio to Google Speech API
+3. `SpeechRecognition` sends audio to Google Speech API for transcription
 4. Transcript goes to stdout, status messages to stderr
 5. Claude Code treats stdout as your typed message
 
@@ -53,13 +76,6 @@ Two modes depending on context:
 |------|------------|------|
 | TTY (terminal) | Press Enter or Esc | Running `cv` directly |
 | Non-TTY (Claude Code) | Auto-stop after 5s silence | Running via `/voice` |
-
-## Requirements
-
-- Python 3.8+
-- macOS or Linux
-- Microphone access granted to Terminal/iTerm
-- Internet connection (for Google Speech API)
 
 ## Configuration
 
@@ -73,13 +89,20 @@ Edit `voice_input.py` to tune these values:
 
 ## Troubleshooting
 
-**Microphone not working** - Grant mic access: macOS System Settings > Privacy & Security > Microphone > Terminal
+**Microphone not working**
+Grant mic access: macOS System Settings > Privacy & Security > Microphone > enable Terminal/iTerm.
 
-**"Could not understand audio"** - Speak clearly, reduce background noise, check mic input level
+**"Could not understand audio"**
+Speak clearly, reduce background noise, check system mic input level.
 
-**Recording stops too early** - Increase `SILENCE_DURATION` in `voice_input.py`
+**Recording stops too early**
+Increase `SILENCE_DURATION` in `voice_input.py` (default 5.0 seconds).
 
-**Import errors** - Re-run `./install.sh`
+**Import errors**
+Re-run `./install.sh`, or manually: `python3 -m pip install sounddevice scipy SpeechRecognition`
+
+**Homebrew not found**
+Install from https://brew.sh, then re-run `./install.sh`.
 
 ## License
 
