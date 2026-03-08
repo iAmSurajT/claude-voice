@@ -26,8 +26,7 @@ cd claude-voice
 The installer handles everything else automatically:
 - Installs `portaudio` via Homebrew (or apt on Linux)
 - Installs Python packages (`sounddevice`, `scipy`, `SpeechRecognition`)
-- Creates `/user:voice` slash command for Claude Code (global)
-- Creates `/project:voice-input` slash command (project-level)
+- Creates `/user:voice` slash command for Claude Code (works globally in any project)
 - Adds `cv` shell alias to your `.zshrc` / `.bashrc`
 
 ## Usage

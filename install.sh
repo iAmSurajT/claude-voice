@@ -128,13 +128,7 @@ If the command succeeds (exit code 0), the stdout output is the user's transcrib
 
 If the command fails (exit code 1), the user cancelled voice input. Just say \"Voice input cancelled.\" and wait for the next message."
 
-# Project-level command
-PROJECT_CMD_DIR="$SCRIPT_DIR/.claude/commands"
-mkdir -p "$PROJECT_CMD_DIR"
-echo "$COMMAND_BODY" > "$PROJECT_CMD_DIR/voice-input.md"
-echo -e "  Command: ${GREEN}/project:voice-input${RESET} (project)"
-
-# User-level command (works globally)
+# User-level command (works globally in any project)
 USER_CMD_DIR="$HOME/.claude/commands"
 mkdir -p "$USER_CMD_DIR"
 echo "$COMMAND_BODY" > "$USER_CMD_DIR/voice.md"
