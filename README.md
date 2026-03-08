@@ -4,6 +4,12 @@ Talk to [Claude Code](https://docs.anthropic.com/en/docs/claude-code) instead of
 
 Records audio directly in the terminal, transcribes via Google Speech API, and feeds the text to Claude Code as if you typed it.
 
+## Demo
+
+https://github.com/iAmSurajT/claude-voice/raw/main/demo/final-recording-voice-demo-1.mov
+
+> Record your voice, get a transcript, and Claude Code responds as if you typed it.
+
 ## Prerequisites
 
 | Dependency | Why | Install |
